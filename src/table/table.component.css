@@ -1,0 +1,94 @@
+.table {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.table__header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  padding: 0 15px;
+}
+
+.table__header-item {
+  white-space: nowrap;
+}
+
+.table__header-item:nth-child(2) {
+  /* padding-left: 60px; */
+}
+
+.nullable {
+  /* display: none; */
+}
+
+.table__header-text {
+}
+
+.table__body {
+}
+
+.table__row {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.table__row-item {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid lightgray;
+  padding: 15px;
+}
+
+.table__row-child {
+  padding-left: 20px;
+}
+
+.table__cell {
+  display: flex;
+}
+
+.table__cell-item {
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+}
+
+.table__cell-item p {
+  padding: 0;
+  margin: 0;
+}
+
+.table__cell-icon {
+  width: 30px;
+  height: 30px;
+  padding-right: 15px;
+}
+
+.table__cell-edit {
+  /* max-width: 30px;
+  max-height: 30px; */
+  width: 30px;
+  height: 30px;
+}
+
+.table__cell-btn-block {
+  display: flex;
+  align-self: flex-start;
+}
+
+.table__cell-btn {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+  max-width: 30px;
+  max-height: 30px;
+}

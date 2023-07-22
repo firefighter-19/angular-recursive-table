@@ -1,0 +1,80 @@
+<div class="table">
+  <div class="table__header">
+    <div
+      class="table__header-item"
+      *ngFor="let tableHeader of tableHeaders"
+      [ngClass]="{ nullable: !tableHeader.name }"
+      #headerCell
+    >
+      <p class="table__header-text">
+        {{ tableHeader.name }}
+      </p>
+    </div>
+  </div>
+  <div class="table__body">
+    <div
+      *ngFor="let tableRow of tableRows; let rowIndex = index"
+      class="table__row"
+    >
+      <div class="table__row-item">
+        <div
+          *ngFor="let tableHeader of tableHeaders"
+          class="table__cell"
+          [ngClass]="{ 'table__cell-nullable': !tableHeader.name }"
+          #tableCell
+        >
+          <ng-template
+            *ngTemplateOutlet="
+              tableHeader.name === null && tableRow.children ? button : name;
+              context: {
+                cell: tableRows[rowIndex].fields[tableHeader.name],
+                id: tableRows[rowIndex].id
+              }
+            "
+          >
+          </ng-template>
+        </div>
+      </div>
+      <div
+        *ngIf="tableRow.children"
+        class="table__row-child"
+        [@detailExpand]="expanded[tableRow.id] ? 'expanded' : 'collapsed'"
+      >
+        <table-component
+          *ngIf="tableRow.children"
+          [table]="tableRow.children"
+        ></table-component>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #name let-cell="cell">
+  <div class="table__cell-item">
+    <img
+      [src]="cell && cell.icon"
+      class="table__cell-icon"
+      *ngIf="cell && cell.icon"
+    />
+    <p *ngIf="cell && cellUnderEdit[cell.id] !== cell.id">{{ cell.name }}</p>
+    <div class="table__cell-btn-block">
+      <button
+        *ngIf="cell && cell.editable"
+        type="button"
+        class="table__cell-btn"
+        click
+      >
+        <img
+          class="table__cell-edit"
+          src="https://cdn.icon-icons.com/icons2/841/PNG/512/flat-style-circle-edit_icon-icons.com_66939.png"
+        />
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #button let-id="id">
+  <button (click)="getId(id)" style="width: '30px'">
+    {{ expanded[id] ? '-' : '+' }}
+  </button>
+</ng-template>
