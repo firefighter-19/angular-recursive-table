@@ -56,12 +56,13 @@
 .table__cell-item {
   display: flex;
   align-items: center;
-  max-width: 500px;
+  max-width: 300px;
 }
 
 .table__cell-item p {
   padding: 0;
   margin: 0;
+  /* word-break: break-all; */
 }
 
 .table__cell-icon {

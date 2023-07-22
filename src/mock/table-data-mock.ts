@@ -40,14 +40,14 @@ const tableRows: TableRow[] = [
     fields: {
       location: {
         id: 'zxcvbnmsadsadsa',
-        name: 'Koln',
+        name: 'KolnKolnKol',
         icon: 'https://cdn-icons-png.flaticon.com/512/187/187879.png',
         editable: false,
         status: { hasStatus: true, color: null },
       },
       manager: {
         id: 'zxcvbnmfhgfjfg',
-        name: 'John Doe',
+        name: 'John DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn DoeJohn Doe',
         icon: 'https://cdn-icons-png.flaticon.com/512/187/187879.png',
         editable: false,
         status: { hasStatus: true, color: null },

@@ -8,7 +8,6 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   AfterViewChecked,
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -88,16 +87,18 @@ export class TableComponent implements OnInit, AfterViewChecked {
       ?.map((el) => el.nativeElement.offsetWidth)
       .slice(0, this.tableHeaders.length)
       .forEach((length, index) => {
-        this.renderer2.setAttribute(
-          this.headerCells?.toArray()[index]?.nativeElement,
-          'style',
-          `width: ${length}px`
-        );
+        if (this.headerCells) {
+          this.renderer2.setAttribute(
+            this.headerCells?.toArray()[index]?.nativeElement,
+            'style',
+            `width: ${length}px`
+          );
+        }
         if (this.cells) {
           const elemIndex =
             this.cells.length - this.tableHeaders.length + index;
           this.renderer2.setAttribute(
-            this.cells?.toArray()[elemIndex].nativeElement,
+            this.cells.toArray()[elemIndex].nativeElement,
             'style',
             `width: ${length}px`
           );
