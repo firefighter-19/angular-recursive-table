@@ -47,6 +47,7 @@ export class TableComponent implements OnInit, AfterViewInit {
   @Input() parentId: string | null = null;
   @Input() table: Table | null = null;
   @Output() updateField = new EventEmitter<{ id: string; name: string }>();
+  @Output() sortBy = new EventEmitter<{ id: string; name: string }>();
 
   @ViewChildren('tableCell', {
     read: ElementRef,
@@ -146,6 +147,9 @@ export class TableComponent implements OnInit, AfterViewInit {
         }
         return 1;
       });
+    } else {
+      //this sort is made for global table
+      this.sortBy.emit({ id: '', name: headerTable });
     }
   }
 
