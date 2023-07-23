@@ -7,45 +7,54 @@ import {
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewChecked,
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   inject,
   Input,
   OnInit,
+  Output,
   QueryList,
   Renderer2,
   ViewChildren,
 } from '@angular/core';
-import { Table, TableHeader, TableRow } from '../model/table.model';
-import { TableSizeListenerDirective } from './table.directive';
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableRowValue,
+} from '../model/table.model';
 
 @Component({
   selector: 'table-component',
   templateUrl: 'table.component.html',
   styles: ['table.component.css'],
   standalone: true,
-  imports: [CommonModule, TableSizeListenerDirective],
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('collapsed, void', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
         animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ),
+      transition(
+        'expanded <=> void',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
     ]),
   ],
 })
-export class TableComponent implements OnInit, AfterViewChecked {
+export class TableComponent implements OnInit, AfterViewInit {
   tableHeaders: TableHeader[] = [];
   tableRows: TableRow[] = [];
+
   expanded: Record<string, boolean> = {};
   cellUnderEdit: Record<string, string> = {};
-
-  flexParams: Record<string, string> = {};
 
   private readonly renderer2: Renderer2 = inject(Renderer2);
 
@@ -53,6 +62,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
     this.cells = null;
     this.headerCells = null;
   }
+
+  @Input() table: Table | null = null;
+  @Output() updateField = new EventEmitter<{ id: string; name: string }>();
 
   @ViewChildren('tableCell', {
     read: ElementRef,
@@ -63,8 +75,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     read: ElementRef,
   })
   headerCells: QueryList<ElementRef> | null;
-
-  @Input() table: Table | null = null;
 
   ngOnInit(): void {
     if (this.table) {
@@ -78,23 +88,28 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  ngAfterViewChecked(): void {
-    this.setDistanceBetweenHeaderElements();
+  ngAfterViewInit(): void {
+    this.setDistanceBetweenElements();
   }
 
-  private setDistanceBetweenHeaderElements(): void {
+  private setDistanceBetweenElements(): void {
     this.cells
       ?.map((el) => el.nativeElement.offsetWidth)
       .slice(0, this.tableHeaders.length)
       .forEach((length, index) => {
         if (this.headerCells) {
           this.renderer2.setAttribute(
-            this.headerCells?.toArray()[index]?.nativeElement,
+            this.headerCells.toArray()[index].nativeElement,
             'style',
             `width: ${length}px`
           );
         }
         if (this.cells) {
+          this.renderer2.setAttribute(
+            this.cells.toArray()[index].nativeElement,
+            'style',
+            `width: ${length}px`
+          );
           const elemIndex =
             this.cells.length - this.tableHeaders.length + index;
           this.renderer2.setAttribute(
@@ -107,12 +122,34 @@ export class TableComponent implements OnInit, AfterViewChecked {
   }
 
   getId(id: string): void {
+    this.expanded = { ...this.expanded, [id]: !this.expanded[id] };
     console.log(this.expanded);
-    this.expanded[id] = !this.expanded[id];
   }
 
   editField(id: string): void {
     this.cellUnderEdit[id] = id;
+  }
+
+  saveField(cell: TableRowValue): void {
+    if (cell.id && cell.name) {
+      delete this.cellUnderEdit[cell.id];
+      this.updateField.emit({ id: cell.id, name: cell.name });
+    }
+  }
+
+  sortColumnBy(headerTable: string): void {
+    const isChild = this.tableRows.every((row) => row.parentId);
+    if (isChild) {
+      this.tableRows = this.tableRows.sort((a, b) => {
+        if (
+          (a.fields[headerTable].name as string) <
+          (b.fields[headerTable].name as string)
+        ) {
+          return -1;
+        }
+        return 1;
+      });
+    }
   }
 
   private tableMapper(

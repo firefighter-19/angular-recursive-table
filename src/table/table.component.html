@@ -5,6 +5,7 @@
       *ngFor="let tableHeader of tableHeaders"
       [ngClass]="{ nullable: !tableHeader.name }"
       #headerCell
+      (click)="sortColumnBy(tableHeader.name)"
     >
       <p class="table__header-text">
         {{ tableHeader.name }}
@@ -57,19 +58,12 @@
       *ngIf="cell && cell.icon"
     />
     <p *ngIf="cell && cellUnderEdit[cell.id] !== cell.id">{{ cell.name }}</p>
-    <div class="table__cell-btn-block">
-      <button
-        *ngIf="cell && cell.editable"
-        type="button"
-        class="table__cell-btn"
-        click
-      >
-        <img
-          class="table__cell-edit"
-          src="https://cdn.icon-icons.com/icons2/841/PNG/512/flat-style-circle-edit_icon-icons.com_66939.png"
-        />
-      </button>
-    </div>
+    <ng-template
+      *ngTemplateOutlet="cell && cellUnderEdit[cell.id] ? underEdit : notUnderEdit; context: {
+      cell: cell,
+    }"
+    >
+    </ng-template>
   </div>
 </ng-template>
 
@@ -77,4 +71,29 @@
   <button (click)="getId(id)" style="width: '30px'">
     {{ expanded[id] ? '-' : '+' }}
   </button>
+</ng-template>
+
+<ng-template #notUnderEdit let-cell="cell">
+  <div class="table__cell-btn-block">
+    <button
+      *ngIf="cell && cell.editable"
+      type="button"
+      class="table__cell-btn"
+      (click)="editField(cell.id)"
+    >
+      <img
+        class="table__cell-edit"
+        src="https://cdn.icon-icons.com/icons2/841/PNG/512/flat-style-circle-edit_icon-icons.com_66939.png"
+      />
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #underEdit let-cell="cell">
+  <div class="table__cell-input-block">
+    <input type="text" [value]="cell.name" class="table__cell-input" />
+    <button type="button" (click)="saveField(cell)" class="table__cell-edit">
+      Save value
+    </button>
+  </div>
 </ng-template>
