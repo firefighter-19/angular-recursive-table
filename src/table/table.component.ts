@@ -26,6 +26,7 @@ import {
   TableRow,
   TableRowValue,
 } from '../model/table.model';
+import { tableAnimation } from './table.animation';
 
 @Component({
   selector: 'table-component',
@@ -34,20 +35,7 @@ import {
   standalone: true,
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed, void', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-      transition(
-        'expanded <=> void',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
+  animations: [tableAnimation],
 })
 export class TableComponent implements OnInit, AfterViewInit {
   tableHeaders: TableHeader[] = [];
