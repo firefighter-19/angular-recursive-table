@@ -1,16 +1,14 @@
 <div class="table">
-  <div class="table__header">
-    <div
+  <div class="table__header" [ngClass]="{ 'table__header-child': parentId }">
+    <button
+      type="button"
       class="table__header-item"
       *ngFor="let tableHeader of tableHeaders"
-      [ngClass]="{ nullable: !tableHeader.name }"
       #headerCell
       (click)="sortColumnBy(tableHeader.name)"
     >
-      <p class="table__header-text">
-        {{ tableHeader.name }}
-      </p>
-    </div>
+      {{ tableHeader.name }}
+    </button>
   </div>
   <div class="table__body">
     <div
@@ -21,7 +19,6 @@
         <div
           *ngFor="let tableHeader of tableHeaders"
           class="table__cell"
-          [ngClass]="{ 'table__cell-nullable': !tableHeader.name }"
           #tableCell
         >
           <ng-template
@@ -44,6 +41,7 @@
         <table-component
           *ngIf="tableRow.children"
           [table]="tableRow.children"
+          [parentId]="tableRow.children.rows[0].parentId"
         ></table-component>
       </div>
     </div>

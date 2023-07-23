@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
@@ -51,6 +44,7 @@ export class TableComponent implements OnInit, AfterViewInit {
     this.headerCells = null;
   }
 
+  @Input() parentId: string | null = null;
   @Input() table: Table | null = null;
   @Output() updateField = new EventEmitter<{ id: string; name: string }>();
 
@@ -77,33 +71,48 @@ export class TableComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.setDistanceBetweenElements();
+    this.getDistanceBetweenElements();
   }
 
-  private setDistanceBetweenElements(): void {
+  private getDistanceBetweenElements(): void {
     this.cells
       ?.map((el) => el.nativeElement.offsetWidth)
       .slice(0, this.tableHeaders.length)
       .forEach((length, index) => {
-        if (this.headerCells) {
+        if (this.headerCells && this.cells) {
+          const headerElementWidth: number =
+            this.headerCells?.toArray()[index].nativeElement.offsetWidth;
+
+          const largestElementOfFirstRowAndHeader = this.compareElementsWidth(
+            length,
+            headerElementWidth
+          );
+
+          const elemIndex =
+            this.cells.length - this.tableHeaders.length + index;
+
+          const widthOfOtherRowElements: number =
+            this.cells?.toArray()[elemIndex].nativeElement.offsetWidth;
+
+          const largestElement = this.compareElementsWidth(
+            widthOfOtherRowElements,
+            largestElementOfFirstRowAndHeader
+          );
+
           this.renderer2.setAttribute(
             this.headerCells.toArray()[index].nativeElement,
             'style',
-            `width: ${length}px`
+            `flex: 0 1 ${largestElement}px`
           );
-        }
-        if (this.cells) {
           this.renderer2.setAttribute(
             this.cells.toArray()[index].nativeElement,
             'style',
-            `width: ${length}px`
+            `flex: 0 1 ${largestElement}px`
           );
-          const elemIndex =
-            this.cells.length - this.tableHeaders.length + index;
           this.renderer2.setAttribute(
             this.cells.toArray()[elemIndex].nativeElement,
             'style',
-            `width: ${length}px`
+            `flex: 0 1 ${largestElement}px`
           );
         }
       });
@@ -138,6 +147,15 @@ export class TableComponent implements OnInit, AfterViewInit {
         return 1;
       });
     }
+  }
+
+  private compareElementsWidth(
+    firstElementWidth: number,
+    secondElementWidth: number
+  ): number {
+    return firstElementWidth < secondElementWidth
+      ? secondElementWidth
+      : firstElementWidth;
   }
 
   private tableMapper(
