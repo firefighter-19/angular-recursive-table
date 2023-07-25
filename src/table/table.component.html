@@ -32,6 +32,20 @@
           >
           </ng-template>
         </div>
+        <ng-container *ngIf="tableRow.editOptions.length">
+          <div class="table__cell-options">
+            <ng-template
+              *ngTemplateOutlet="
+                tableRow.editOptions.length > 2
+                  ? editOptionButton
+                  : editOptions;
+                context: {
+                  options: tableRow.editOptions
+                }
+              "
+            ></ng-template>
+          </div>
+        </ng-container>
       </div>
       <div
         *ngIf="tableRow.children"
@@ -93,5 +107,15 @@
     <button type="button" (click)="saveField(cell)" class="table__cell-edit">
       Save value
     </button>
+  </div>
+</ng-template>
+
+<ng-template #editOptionButton let-options="options">
+  <button>...</button>
+</ng-template>
+
+<ng-template #editOptions let-options="options">
+  <div *ngFor="let option of options" class="table__cell">
+    {{ option }}
   </div>
 </ng-template>

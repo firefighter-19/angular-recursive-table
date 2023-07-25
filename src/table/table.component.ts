@@ -198,6 +198,23 @@ export class TableComponent implements OnInit, AfterViewInit {
     };
   }
 
+  // private addEditOptionsToRow(tableHeaders: TableHeader[],
+  //   tableRows: TableRow[]) {
+  //     return tableRows.map((row) => {
+  //       if(row.editOptions.length > 2) {
+  //         let i = 0;
+  //         while(row.editOptions[i]) {
+  //           const editOption = {
+  //             [row.editOptions[i]]: {
+  //               name: row.editOptions[i]
+  //             }
+  //           }
+
+  //         }
+  //       }
+  //     })
+  // }
+
   private addRowChild(tableRows: TableRow[]): TableRow[] {
     return tableRows.map((row) => ({
       ...row,

@@ -183,12 +183,12 @@ const tableRows: TableRow[] = [
                 parentId: '6543321',
                 children: null,
                 selectable: false,
-                editOptions: [],
+                editOptions: ['raz', 'dva', 'tree'],
               },
             ],
           },
           selectable: false,
-          editOptions: [],
+          editOptions: ['raz', 'dva'],
         },
         {
           fields: {
@@ -218,12 +218,12 @@ const tableRows: TableRow[] = [
           parentId: '123456',
           children: null,
           selectable: false,
-          editOptions: [],
+          editOptions: ['raz', 'dva'],
         },
       ],
     },
     selectable: false,
-    editOptions: [],
+    editOptions: ['raz', 'dva'],
   },
   {
     fields: {
@@ -253,7 +253,7 @@ const tableRows: TableRow[] = [
     parentId: null,
     children: null,
     selectable: false,
-    editOptions: [],
+    editOptions: ['raz', 'dva', 'tree'],
   },
 ];
 
